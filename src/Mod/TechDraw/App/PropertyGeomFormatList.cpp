@@ -161,17 +161,17 @@ void PropertyGeomFormatList::Restore(Base::XMLReader &reader)
     reader.clearPartialRestoreObject();
     reader.readElement("GeomFormatList");
     // get the value of my attribute
-    int count = reader.getAttributeAsInteger("count");
+    int count = reader.getAttribute<long>("count");
     std::vector<GeomFormat*> values;
     values.reserve(count);
     for (int i = 0; i < count; i++) {
         reader.readElement("GeomFormat");
-        const char* TypeName = reader.getAttribute("type");
+        const char* TypeName = reader.getAttribute<const char*>("type");
         GeomFormat *newG = static_cast<GeomFormat *>(Base::Type::fromName(TypeName).createInstance());
         newG->Restore(reader);
 
         if(reader.testStatus(Base::XMLReader::ReaderStatus::PartialRestoreInObject)) {
-            Base::Console().Error("GeomFormat \"%s\" within a PropertyGeomFormatList was subject to a partial restore.\n", reader.localName());
+            Base::Console().error("GeomFormat \"%s\" within a PropertyGeomFormatList was subject to a partial restore.\n", reader.localName());
             if(isOrderRelevant()) {
                 // Pushes the best try by the GeomFormat class
                 values.push_back(newG);

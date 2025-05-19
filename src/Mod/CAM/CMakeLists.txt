@@ -60,7 +60,6 @@ SET(PathPythonDressup_SRCS
     Path/Dressup/__init__.py
     Path/Dressup/Utils.py
     Path/Dressup/Array.py
-    Path/Dressup/Base.py
     Path/Dressup/Boundary.py
     Path/Dressup/DogboneII.py
     Path/Dressup/Tags.py
@@ -223,6 +222,7 @@ SET(PathPythonOpGui_SRCS
     Path/Op/Gui/FeatureExtension.py
     Path/Op/Gui/Helix.py
     Path/Op/Gui/MillFace.py
+    Path/Op/Gui/PathShapeTC.py
     Path/Op/Gui/Pocket.py
     Path/Op/Gui/PocketBase.py
     Path/Op/Gui/PocketShape.py
