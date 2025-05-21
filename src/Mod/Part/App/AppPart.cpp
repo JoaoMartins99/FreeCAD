@@ -104,6 +104,7 @@
 #include "LineSegmentPy.h"
 #include "OffsetCurvePy.h"
 #include "OffsetSurfacePy.h"
+#include "NotePy.h"
 #include "ParabolaPy.h"
 #include "Part2DObject.h"
 #include "Part2DObjectPy.h"
@@ -507,6 +508,7 @@ PyMOD_INIT_FUNC(Part)
     Part::GeometryMigrationExtension	::init();
     Part::GeometryMigrationPersistenceExtension	::init();
     Part::Geometry                	::init();
+    Part::GeomNote               	::init();
     Part::GeomPoint               	::init();
     Part::GeomCurve               	::init();
     Part::GeomBoundedCurve        	::init();

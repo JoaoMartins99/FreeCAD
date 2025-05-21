@@ -59,7 +59,7 @@ public:
     ~DrawSketchHandlerNote() override = default;
 
 private:
-/*
+
     void updateDataAndDrawToPosition(Base::Vector2d onSketchPos) override
     {
         switch (state()) {
@@ -81,7 +81,7 @@ private:
     void executeCommands() override
     {
         try {
-            Gui::Command::openCommand(QT_TRANSLATE_NOOP("Command", "Add sketch point"));
+            Gui::Command::openCommand(QT_TRANSLATE_NOOP("Command", "Add sketch note"));
             Gui::cmdAppObjectArgs(sketchgui->getObject(),
                                   "addGeometry(Part.Note(App.Vector(%f,%f,0)), %s)",
                                   editNote.x,
@@ -93,13 +93,13 @@ private:
         catch (const Base::Exception&) {
             Gui::NotifyError(sketchgui,
                              QT_TRANSLATE_NOOP("Notifications", "Error"),
-                             QT_TRANSLATE_NOOP("Notifications", "Failed to add point"));
+                             QT_TRANSLATE_NOOP("Notifications", "Failed to add note"));
 
             Gui::Command::abortCommand();
         }
             
     }
-
+/*
     void createAutoConstraints() override
     {
         
@@ -126,10 +126,9 @@ private:
     {
         return std::make_unique<SketcherToolDefaultWidget>();
     }
-
+*/
 private:
     Base::Vector2d editNote;
-    */
 };
 
 /*

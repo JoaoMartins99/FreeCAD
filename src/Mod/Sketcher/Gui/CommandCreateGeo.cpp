@@ -1883,7 +1883,7 @@ CmdSketcherCreateNote::CmdSketcherCreateNote()
     sToolTipText = QT_TR_NOOP("Create a note in the sketch");
     sWhatsThis = "Sketcher_CreateNote";
     sStatusTip = sToolTipText;
-    sPixmap = "Sketcher_CreatePoint";
+    sPixmap = "Sketcher_CreateText";
     sAccel = "N, P";
     eType = ForEdit;
 }
