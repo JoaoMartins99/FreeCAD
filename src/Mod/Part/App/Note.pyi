@@ -22,7 +22,7 @@ class Note(Geometry):
     Part.Note(Note)
         Creates a copy of the given note
     
-    Part.Point(Vector)
+    Part.Note(Vector)
         Creates a line for the given coordinates
 
     """

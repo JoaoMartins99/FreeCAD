@@ -99,7 +99,7 @@ private:
         }
             
     }
-/*
+
     void createAutoConstraints() override
     {
         
@@ -111,7 +111,7 @@ private:
         }
             
     }
-
+    
     std::string getToolName() const override
     {
         return "DSH_Note";
@@ -119,19 +119,19 @@ private:
 
     QString getCrosshairCursorSVGName() const override
     {
-        return QStringLiteral("Sketcher_Pointer_Create_Note");
+        return QStringLiteral("Sketcher_Pointer_Text");
     }
 
     std::unique_ptr<QWidget> createWidget() const override
     {
         return std::make_unique<SketcherToolDefaultWidget>();
     }
-*/
+
 private:
     Base::Vector2d editNote;
 };
 
-/*
+
 template<>
 auto DSHNoteController::getState(int labelindex) const
 {
@@ -270,7 +270,7 @@ void DSHNoteController::addConstraints()
     }
         
 }
-*/
+
 
 }  // namespace SketcherGui
 
