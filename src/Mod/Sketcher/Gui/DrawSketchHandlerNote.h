@@ -27,6 +27,8 @@
 #include <Gui/Notifications.h>
 #include <Gui/Command.h>
 #include <Gui/CommandT.h>
+#include <QInputDialog>
+#include <QLineEdit>
 
 #include <Mod/Sketcher/App/SketchObject.h>
 
@@ -81,13 +83,25 @@ private:
     void executeCommands() override
     {
         try {
+            bool ok;
+            QString text = QInputDialog::getText(
+                nullptr,  
+                QObject::tr("Create Note"),
+                QObject::tr("Note text:"),
+                QLineEdit::Normal,
+                QString(),       
+                &ok);
+
+            if (!ok || text.isEmpty()) {
+                Gui::Command::abortCommand();
+                return;
+            }
             Gui::Command::openCommand(QT_TRANSLATE_NOOP("Command", "Add sketch note"));
             Gui::cmdAppObjectArgs(sketchgui->getObject(),
                                   "addGeometry(Part.Note(App.Vector(%f,%f,0)), %s)",
                                   editNote.x,
                                   editNote.y,
                                   isConstructionMode() ? "True" : "False");
-
             Gui::Command::commitCommand();
         }
         catch (const Base::Exception&) {
