@@ -32,7 +32,6 @@
 
 using namespace Part;
 
-// returns a string which represents the object e.g. when printed in python
 std::string NotePy::representation() const
 {
     std::stringstream str;
@@ -42,16 +41,14 @@ std::string NotePy::representation() const
     return str.str();
 }
 
-PyObject* NotePy::PyMake(struct _typeobject *, PyObject *, PyObject *)  // Python wrapper
+PyObject* NotePy::PyMake(struct _typeobject *, PyObject *, PyObject *)  
 {
     return new NotePy(new GeomNote);
 }
 
 int NotePy::PyInit(PyObject* args, PyObject* /*kwd*/)
 {
-    // Construtor: vazio ou a copiar outro Note ou com parâmetros (podes expandir)
     if (PyArg_ParseTuple(args, "")) {
-        // construtor default
         return 0;
     }
 
@@ -64,18 +61,25 @@ int NotePy::PyInit(PyObject* args, PyObject* /*kwd*/)
         return 0;
     }
 
-    // Poderás querer aceitar parâmetros para posição, texto, cor, etc.
+    PyErr_Clear();
+
+    PyObject* pVec = nullptr;
+    const char* txt = nullptr;
+    if (PyArg_ParseTuple(args, "O!s", &(Base::VectorPy::Type), &pVec, &txt)) {
+        Base::Vector3d vec = static_cast<Base::VectorPy*>(pVec)->value();
+        getGeomNotePtr()->setPosition(vec);
+        getGeomNotePtr()->setText(txt);
+        return 0;
+    }
 
     PyErr_SetString(PyExc_TypeError,
-                    "Note constructor accepts:\n"
-                    "-- no parameters\n"
-                    "-- another Note object\n"
-                    //"-- (opcional) parâmetros para posição, texto, cor...\n"
-    );
+        "Note constructor accepts:\n"
+        "-- no parameters\n"
+        "-- another Note object\n"
+        "-- a Vector and a string (position, text)");
     return -1;
 }
 
-// Getters/Setters para posição (X, Y, Z)
 Py::Float NotePy::getX() const
 {
     return Py::Float(getGeomNotePtr()->getPosition().x);
@@ -112,7 +116,6 @@ void NotePy::setZ(Py::Float z)
     getGeomNotePtr()->setPosition(pos);
 }
 
-// Getter/Setter para o texto
 Py::String NotePy::getText() const
 {
     return Py::String(getGeomNotePtr()->getText());
@@ -124,7 +127,6 @@ void NotePy::setText(Py::String arg)
     getGeomNotePtr()->setText(s);
 }
 
-// Getter/Setter para font size
 Py::Float NotePy::getFontSize() const
 {
     return Py::Float(getGeomNotePtr()->getFontSize());
@@ -135,7 +137,6 @@ void NotePy::setFontSize(Py::Float fs)
     getGeomNotePtr()->setFontSize(double(fs));
 }
 
-// Getter/Setter para cor (RGBA)
 Py::Tuple NotePy::getColor() const
 {
     const float* c = getGeomNotePtr()->getColor();

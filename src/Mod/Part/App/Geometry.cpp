@@ -564,6 +564,9 @@ GeomNote::GeomNote(const Base::Vector3d& p)
 
 GeomNote::~GeomNote() = default;
 
+GeomNote::GeomNote(const Base::Vector3d& p, const std::string& txt)
+    : position(p), text(txt), fontSize(12.0), color{0.0f, 0.0f, 0.0f, 1.0f} {}
+
 
 Base::Vector3d GeomNote::getPosition() const 
 { 

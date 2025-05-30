@@ -191,6 +191,7 @@ public:
     GeomNote();
     GeomNote(const GeomNote& other);
     explicit GeomNote(const Base::Vector3d&);
+    GeomNote(const Base::Vector3d& p, const std::string& txt);
     ~GeomNote() override;
     Geometry* copy() const override;
     TopoDS_Shape toShape() const override;

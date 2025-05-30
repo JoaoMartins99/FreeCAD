@@ -98,9 +98,10 @@ private:
             }
             Gui::Command::openCommand(QT_TRANSLATE_NOOP("Command", "Add sketch note"));
             Gui::cmdAppObjectArgs(sketchgui->getObject(),
-                                  "addGeometry(Part.Note(App.Vector(%f,%f,0)), %s)",
+                                  "addGeometry(Part.Note(App.Vector(%f,%f,0), '%s'), %s)",
                                   editNote.x,
                                   editNote.y,
+                                  text.toStdString().c_str(),
                                   isConstructionMode() ? "True" : "False");
             Gui::Command::commitCommand();
         }

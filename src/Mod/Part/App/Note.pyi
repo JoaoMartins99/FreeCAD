@@ -24,6 +24,9 @@ class Note(Geometry):
     
     Part.Note(Vector)
         Creates a note for the given coordinates
+    
+    Part.Note(Vector, str)
+        Creates a note with the text (str) for the given coordinates
 
     """
 
@@ -35,6 +38,9 @@ class Note(Geometry):
 
     @overload
     def __init__(self, coordinates: Vector) -> None: ...
+
+    @overload
+    def __init__(self, coordinates: Vector, text: str) -> None: ...
 
     X: float = ...
     """X component of this note."""
