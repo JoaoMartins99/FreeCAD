@@ -54,10 +54,10 @@ int NotePy::PyInit(PyObject* args, PyObject* /*kwd*/)
 
     PyErr_Clear();
 
-    PyObject* pNote = nullptr;
-    if (PyArg_ParseTuple(args, "O!", &(NotePy::Type), &pNote)) {
-        NotePy* other = static_cast<NotePy*>(pNote);
-        getGeomNotePtr()->copyFrom(*(other->getGeomNotePtr()));
+    PyObject* pVecOnly = nullptr;
+    if (PyArg_ParseTuple(args, "O!", &(Base::VectorPy::Type), &pVecOnly)) {
+        Base::Vector3d vec = static_cast<Base::VectorPy*>(pVecOnly)->value();
+        getGeomNotePtr()->setPosition(vec);
         return 0;
     }
 
@@ -72,11 +72,10 @@ int NotePy::PyInit(PyObject* args, PyObject* /*kwd*/)
         return 0;
     }
 
-    PyErr_SetString(PyExc_TypeError,
-        "Note constructor accepts:\n"
-        "-- no parameters\n"
-        "-- another Note object\n"
-        "-- a Vector and a string (position, text)");
+    PyErr_SetString(PyExc_TypeError, "Note constructor accepts:\n"
+        "-- empty parameter list\n"
+        "-- Coordinates vector\n"
+        "-- Coordinates vector and a string (position, text)");
     return -1;
 }
 

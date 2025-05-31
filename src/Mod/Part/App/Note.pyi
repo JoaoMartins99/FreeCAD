@@ -18,9 +18,6 @@ class Note(Geometry):
     To create a note there are several ways:
     Part.Note()
         Creates a default note
-
-    Part.Note(Note)
-        Creates a copy of the given note
     
     Part.Note(Vector)
         Creates a note for the given coordinates
@@ -32,9 +29,6 @@ class Note(Geometry):
 
     @overload
     def __init__(self) -> None: ...
-
-    @overload
-    def __init__(self, other: "Note") -> None: ...
 
     @overload
     def __init__(self, coordinates: Vector) -> None: ...
