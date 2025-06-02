@@ -4408,6 +4408,9 @@ void Sketch::updateGeometry(const GeoDef& it)
     else if (it.type == BSpline) {
         updateBSpline(it);
     }
+    else if (it.type == Note) {
+        updateNote(it);
+    }
 }
 
 void Sketch::updatePoint(const GeoDef& def)
@@ -4416,6 +4419,13 @@ void Sketch::updatePoint(const GeoDef& def)
     auto pointf = GeometryFacade::getFacade(point);
 
     point->setPoint(Vector3d(*Points[def.startPointId].x, *Points[def.startPointId].y, 0.0));
+}
+
+void Sketch::updateNote(const GeoDef& def)
+{
+    GeomNote* note = static_cast<GeomNote*>(def.geo);
+
+    note->setPosition(Vector3d(*Points[def.startPointId].x, *Points[def.startPointId].y, 0.0));
 }
 
 void Sketch::updateLineSegment(const GeoDef& def)

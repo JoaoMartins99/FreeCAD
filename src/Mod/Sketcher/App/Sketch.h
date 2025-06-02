@@ -727,6 +727,7 @@ private:
     void tryUpdateGeometry();
     void updateGeometry(const GeoDef&);
     void updatePoint(const GeoDef&);
+    void updateNote(const GeoDef&);
     void updateLineSegment(const GeoDef&);
     void updateArcOfCircle(const GeoDef&);
     void updateArcOfEllipse(const GeoDef&);
