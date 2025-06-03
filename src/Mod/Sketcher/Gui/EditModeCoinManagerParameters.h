@@ -425,6 +425,15 @@ struct EditModeScenegraphNodes
     SoDrawStyle* HiddenCurvesDrawStyle;
     //@}
 
+    /** @name Note nodes*/
+    //@{
+    SmSwitchboard* NotesGroup;
+    std::vector<std::vector<SoMaterial*>> NotesMaterial;
+    std::vector<std::vector<SoText2*>> NotesText;
+    std::vector<std::vector<SoTranslation*>> NotesCoordinate;
+    std::vector<std::vector<SoFont*>> NotesFont;
+    //@}
+
     /** @name Axes nodes*/
     /// @warning Root Point is added together with the Point nodes above
     //@{

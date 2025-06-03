@@ -267,6 +267,19 @@ void EditModeGeometryCoinConverter::convert(const Sketcher::GeoListFacade& geoli
                         subLayerId);
             bsplineGeoIds.push_back(GeoId);
         }
+        else if (type == Part::GeomNote::getClassTypeId()) {
+            convert<Part::GeomNote,
+                    EditModeGeometryCoinConverter::PointsMode::InsertNote,
+                    EditModeGeometryCoinConverter::CurveMode::NoCurve,
+                    EditModeGeometryCoinConverter::AnalyseMode::BoundingBoxMagnitude>(geom,
+                                                                                      GeoId,
+                                                                                      subLayerId);
+            setTracking(GeoId,
+                        coinLayer,
+                        EditModeGeometryCoinConverter::PointsMode::InsertSingle,
+                        0,
+                        subLayerId);
+        }
     }
 
     // Coin Nodes Editing
@@ -347,6 +360,9 @@ void EditModeGeometryCoinConverter::convert(const Sketcher::GeometryFacade* geom
     }
     else if constexpr (pointmode == PointsMode::InsertMidOnly) {
         addPoint(Points[coinLayer], geo->getCenter());
+    }
+    else if constexpr (pointmode == PointsMode::InsertNote) {
+        addPoint(Points[coinLayer], geo->getPosition());
     }
 
     // Curves

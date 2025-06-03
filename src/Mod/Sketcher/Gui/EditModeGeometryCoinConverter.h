@@ -81,7 +81,8 @@ private:
         InsertSingle,
         InsertStartEnd,
         InsertStartEndMid,
-        InsertMidOnly
+        InsertMidOnly,
+        InsertNote
     };
 
     enum class CurveMode

@@ -76,8 +76,10 @@ void EditModeGeometryCoinManager::processGeometry(const GeoListFacade& geolistfa
     editModeScenegraphNodes.PointsGroup->enable.setNum(geometryLayerParameters.getCoinLayerCount());
     editModeScenegraphNodes.CurvesGroup->enable.setNum(
         geometryLayerParameters.getCoinLayerCount() * geometryLayerParameters.getSubLayerCount());
+    editModeScenegraphNodes.NotesGroup->enable.setNum(geometryLayerParameters.getCoinLayerCount());
     SbBool* swsp = editModeScenegraphNodes.PointsGroup->enable.startEditing();
     SbBool* swsc = editModeScenegraphNodes.CurvesGroup->enable.startEditing();
+    SbBool* swsn = editModeScenegraphNodes.NotesGroup->enable.startEditing();
 
     auto layersconfigurations = viewProvider.VisualLayerList.getValues();
 
@@ -85,6 +87,7 @@ void EditModeGeometryCoinManager::processGeometry(const GeoListFacade& geolistfa
         auto enabled = layersconfigurations[l].isVisible();
 
         swsp[l] = enabled;
+        swsn[l] = enabled;
         int slCount = geometryLayerParameters.getSubLayerCount();
         for (int t = 0; t < slCount; t++) {
             swsc[l * slCount + t] = enabled;
@@ -93,13 +96,18 @@ void EditModeGeometryCoinManager::processGeometry(const GeoListFacade& geolistfa
 
     editModeScenegraphNodes.PointsGroup->enable.finishEditing();
     editModeScenegraphNodes.CurvesGroup->enable.finishEditing();
+    editModeScenegraphNodes.NotesGroup->enable.finishEditing();
 
     // Define the coin nodes that will be filled in with the geometry layers
     GeometryLayerNodes geometrylayernodes {editModeScenegraphNodes.PointsMaterials,
                                            editModeScenegraphNodes.PointsCoordinate,
                                            editModeScenegraphNodes.CurvesMaterials,
                                            editModeScenegraphNodes.CurvesCoordinate,
-                                           editModeScenegraphNodes.CurveSet};
+                                           editModeScenegraphNodes.CurveSet,
+                                           editModeScenegraphNodes.NotesMaterial,
+                                           editModeScenegraphNodes.NotesCoordinate,
+                                           editModeScenegraphNodes.NotesFont,
+                                           };
 
     // process geometry layers
     EditModeGeometryCoinConverter gcconv(viewProvider,
@@ -574,12 +582,17 @@ void EditModeGeometryCoinManager::createGeometryRootNodes()
     // stuff for the Curves +++++++++++++++++++++++++++++++++++++++
     editModeScenegraphNodes.CurvesGroup = new SmSwitchboard;
     editModeScenegraphNodes.EditRoot->addChild(editModeScenegraphNodes.CurvesGroup);
+
+    // stuff for the Notes +++++++++++++++++++++++++++++++++++++++
+    editModeScenegraphNodes.NotesGroup = new SmSwitchboard;
+    editModeScenegraphNodes.EditRoot->addChild(editModeScenegraphNodes.NotesGroup);
 }
 
 void EditModeGeometryCoinManager::emptyGeometryRootNodes()
 {
     Gui::coinRemoveAllChildren(editModeScenegraphNodes.PointsGroup);
     Gui::coinRemoveAllChildren(editModeScenegraphNodes.CurvesGroup);
+    Gui::coinRemoveAllChildren(editModeScenegraphNodes.NotesGroup);
 }
 
 void EditModeGeometryCoinManager::createEditModePointInventorNodes()
@@ -628,7 +641,7 @@ void EditModeGeometryCoinManager::createEditModeCurveInventorNodes()
     editModeScenegraphNodes.CurvesDrawStyle = new SoDrawStyle;
     editModeScenegraphNodes.CurvesDrawStyle->setName("CurvesDrawStyle");
     editModeScenegraphNodes.CurvesDrawStyle->lineWidth =
-        drawingParameters.CurveWidth * drawingParameters.pixelScalingFactor;
+        drawingParameters.CurveWidth * drawingParameters.pixelScalingFactor * 500;
     editModeScenegraphNodes.CurvesDrawStyle->linePattern = drawingParameters.CurvePattern;
     editModeScenegraphNodes.CurvesDrawStyle->linePatternScaleFactor = 2;
 
@@ -712,5 +725,46 @@ void EditModeGeometryCoinManager::createEditModeCurveInventorNodes()
             editModeScenegraphNodes.CurvesGroup->addChild(sep);
             sep->unref();
         }
+    }
+}
+
+void EditModeGeometryCoinManager::createEditModeNoteInventorNodes()
+{
+    for (int i = 0; i < geometryLayerParameters.getCoinLayerCount(); i++) {
+        SoSeparator* sep = new SoSeparator;
+        sep->ref();
+
+        auto somaterial = new SoMaterial;
+        editModeScenegraphNodes.PointsMaterials.push_back(somaterial);
+        editModeScenegraphNodes.PointsMaterials[i]->setName(concat("PointsMaterials_", i).c_str());
+        sep->addChild(editModeScenegraphNodes.PointsMaterials[i]);
+
+        SoMaterialBinding* MtlBind = new SoMaterialBinding;
+        MtlBind->setName(concat("PointsMaterialBinding", i).c_str());
+        MtlBind->value = SoMaterialBinding::PER_VERTEX;
+        sep->addChild(MtlBind);
+
+        auto coords = new SoCoordinate3;
+        editModeScenegraphNodes.PointsCoordinate.push_back(coords);
+        editModeScenegraphNodes.PointsCoordinate[i]->setName(concat("PointsCoordinate", i).c_str());
+        sep->addChild(editModeScenegraphNodes.PointsCoordinate[i]);
+
+        auto drawstyle = new SoDrawStyle;
+        editModeScenegraphNodes.PointsDrawStyle.push_back(drawstyle);
+        editModeScenegraphNodes.PointsDrawStyle[i]->setName(concat("PointsDrawStyle", i).c_str());
+        editModeScenegraphNodes.PointsDrawStyle[i]->pointSize =
+            8 * drawingParameters.pixelScalingFactor;
+        sep->addChild(editModeScenegraphNodes.PointsDrawStyle[i]);
+
+        auto pointset = new SoMarkerSet;
+        editModeScenegraphNodes.PointSet.push_back(pointset);
+        editModeScenegraphNodes.PointSet[i]->setName(concat("PointSet", i).c_str());
+        editModeScenegraphNodes.PointSet[i]->markerIndex =
+            Gui::Inventor::MarkerBitmaps::getMarkerIndex("CIRCLE_FILLED",
+                                                         drawingParameters.markerSize);
+        sep->addChild(editModeScenegraphNodes.PointSet[i]);
+
+        editModeScenegraphNodes.PointsGroup->addChild(sep);
+        sep->unref();
     }
 }
