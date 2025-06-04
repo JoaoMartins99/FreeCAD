@@ -31,6 +31,9 @@
 #include <Inventor/nodes/SoMarkerSet.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/nodes/SoText2.h>
+#include <Inventor/nodes/SoTranslation.h>
+#include <Inventor/nodes/SoFont.h>
 #endif  // #ifndef _PreComp_
 
 #include <Gui/Inventor/MarkerBitmaps.h>
@@ -104,9 +107,9 @@ void EditModeGeometryCoinManager::processGeometry(const GeoListFacade& geolistfa
                                            editModeScenegraphNodes.CurvesMaterials,
                                            editModeScenegraphNodes.CurvesCoordinate,
                                            editModeScenegraphNodes.CurveSet,
-                                           editModeScenegraphNodes.NotesMaterial,
-                                           editModeScenegraphNodes.NotesCoordinate,
-                                           editModeScenegraphNodes.NotesFont,
+                                           editModeScenegraphNodes.NotesMaterials,
+                                           editModeScenegraphNodes.NotesCoordinates,
+                                           editModeScenegraphNodes.NotesFonts
                                            };
 
     // process geometry layers
@@ -735,34 +738,29 @@ void EditModeGeometryCoinManager::createEditModeNoteInventorNodes()
         sep->ref();
 
         auto somaterial = new SoMaterial;
-        editModeScenegraphNodes.PointsMaterials.push_back(somaterial);
-        editModeScenegraphNodes.PointsMaterials[i]->setName(concat("PointsMaterials_", i).c_str());
-        sep->addChild(editModeScenegraphNodes.PointsMaterials[i]);
+        editModeScenegraphNodes.NotesMaterials.push_back(somaterial);
+        editModeScenegraphNodes.NotesMaterials[i]->setName(concat("NotesMaterials_", i).c_str());
+        sep->addChild(editModeScenegraphNodes.NotesMaterials[i]);
 
         SoMaterialBinding* MtlBind = new SoMaterialBinding;
-        MtlBind->setName(concat("PointsMaterialBinding", i).c_str());
-        MtlBind->value = SoMaterialBinding::PER_VERTEX;
+        MtlBind->setName(concat("NotesMaterialBinding", i).c_str());
+        MtlBind->value = SoMaterialBinding::PER_VERTEX; //OVERALL?
         sep->addChild(MtlBind);
 
-        auto coords = new SoCoordinate3;
-        editModeScenegraphNodes.PointsCoordinate.push_back(coords);
-        editModeScenegraphNodes.PointsCoordinate[i]->setName(concat("PointsCoordinate", i).c_str());
-        sep->addChild(editModeScenegraphNodes.PointsCoordinate[i]);
+        auto coords = new SoTranslation;
+        editModeScenegraphNodes.NotesCoordinates.push_back(coords);
+        editModeScenegraphNodes.NotesCoordinates[i]->setName(concat("NotesCoordinates", i).c_str());
+        sep->addChild(editModeScenegraphNodes.NotesCoordinates[i]);
 
-        auto drawstyle = new SoDrawStyle;
-        editModeScenegraphNodes.PointsDrawStyle.push_back(drawstyle);
-        editModeScenegraphNodes.PointsDrawStyle[i]->setName(concat("PointsDrawStyle", i).c_str());
-        editModeScenegraphNodes.PointsDrawStyle[i]->pointSize =
-            8 * drawingParameters.pixelScalingFactor;
-        sep->addChild(editModeScenegraphNodes.PointsDrawStyle[i]);
+        auto text = new SoText2;
+        editModeScenegraphNodes.NotesTexts.push_back(text);
+        editModeScenegraphNodes.NotesTexts[i]->setName(concat("NotesTexts", i).c_str());
+        sep->addChild(editModeScenegraphNodes.NotesTexts[i]);
 
-        auto pointset = new SoMarkerSet;
-        editModeScenegraphNodes.PointSet.push_back(pointset);
-        editModeScenegraphNodes.PointSet[i]->setName(concat("PointSet", i).c_str());
-        editModeScenegraphNodes.PointSet[i]->markerIndex =
-            Gui::Inventor::MarkerBitmaps::getMarkerIndex("CIRCLE_FILLED",
-                                                         drawingParameters.markerSize);
-        sep->addChild(editModeScenegraphNodes.PointSet[i]);
+        auto font = new SoFont;
+        editModeScenegraphNodes.NotesFonts.push_back(font);
+        editModeScenegraphNodes.NotesFonts[i]->setName(concat("NotesFonts", i).c_str());
+        sep->addChild(editModeScenegraphNodes.NotesFonts[i]);
 
         editModeScenegraphNodes.PointsGroup->addChild(sep);
         sep->unref();
