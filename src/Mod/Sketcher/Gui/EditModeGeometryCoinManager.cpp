@@ -762,7 +762,7 @@ void EditModeGeometryCoinManager::createEditModeNoteInventorNodes()
         editModeScenegraphNodes.NotesFonts[i]->setName(concat("NotesFonts", i).c_str());
         sep->addChild(editModeScenegraphNodes.NotesFonts[i]);
 
-        editModeScenegraphNodes.PointsGroup->addChild(sep);
+        editModeScenegraphNodes.NotesGroup->addChild(sep);
         sep->unref();
     }
 }
