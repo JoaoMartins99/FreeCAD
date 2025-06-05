@@ -109,7 +109,8 @@ void EditModeGeometryCoinManager::processGeometry(const GeoListFacade& geolistfa
                                            editModeScenegraphNodes.CurveSet,
                                            editModeScenegraphNodes.NotesMaterials,
                                            editModeScenegraphNodes.NotesCoordinates,
-                                           editModeScenegraphNodes.NotesFonts
+                                           editModeScenegraphNodes.NotesFonts,
+                                           editModeScenegraphNodes.NotesTexts,
                                            };
 
     // process geometry layers
@@ -557,6 +558,7 @@ void EditModeGeometryCoinManager::updateGeometryLayersConfiguration()
     emptyGeometryRootNodes();
     createEditModePointInventorNodes();
     createEditModeCurveInventorNodes();
+    createEditModeNoteInventorNodes();
 }
 
 auto concat(std::string string, int i)
@@ -574,6 +576,8 @@ void EditModeGeometryCoinManager::createEditModeInventorNodes()
     createEditModePointInventorNodes();
 
     createEditModeCurveInventorNodes();
+
+    createEditModeNoteInventorNodes();
 }
 
 void EditModeGeometryCoinManager::createGeometryRootNodes()
@@ -644,7 +648,7 @@ void EditModeGeometryCoinManager::createEditModeCurveInventorNodes()
     editModeScenegraphNodes.CurvesDrawStyle = new SoDrawStyle;
     editModeScenegraphNodes.CurvesDrawStyle->setName("CurvesDrawStyle");
     editModeScenegraphNodes.CurvesDrawStyle->lineWidth =
-        drawingParameters.CurveWidth * drawingParameters.pixelScalingFactor * 500;
+        drawingParameters.CurveWidth * drawingParameters.pixelScalingFactor;
     editModeScenegraphNodes.CurvesDrawStyle->linePattern = drawingParameters.CurvePattern;
     editModeScenegraphNodes.CurvesDrawStyle->linePatternScaleFactor = 2;
 

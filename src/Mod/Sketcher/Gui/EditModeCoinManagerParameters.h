@@ -191,6 +191,7 @@ struct GeometryLayerNodes
     std::vector<SoMaterial*>& NotesMaterials;
     std::vector<SoTranslation*>& NotesCoordinates;
     std::vector<SoFont*>& NotesFonts;
+    std::vector<SoText2*>& NotesTexts;
     //@}
 };
 
