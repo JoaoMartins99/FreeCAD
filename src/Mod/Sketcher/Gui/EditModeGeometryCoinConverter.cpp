@@ -330,12 +330,14 @@ void EditModeGeometryCoinConverter::convert(const Sketcher::GeoListFacade& geoli
         text->justification = SoText2::CENTER;
         text->spacing = 1.0f;
         text->string.setNum(Notes[l].size());
+        SbString *text_strings = text->string.startEditing();
 
         i = 0;  // setting up the note set
         for (auto& note : Notes[l]) {
             translations->translation.setValue(note.x, note.y, notez);
-            text->string.setValue(Texts[l][i].c_str());
+            text_strings[i] = SbString(Texts[l][i].c_str());
         }
+        text->string.finishEditing();
     }
 }
 
@@ -360,26 +362,6 @@ void EditModeGeometryCoinConverter::convert(const Sketcher::GeometryFacade* geom
             pushvector.push_back(point);
         }
     };
-
-    for (auto& point : Points[0]) {
-        printf(":) - 0\n");
-    }
-     for (auto& point : Points[1]) {
-        printf(":) - 1\n");
-    }
-     for (auto& point : Points[2]) {
-        printf(":) - 2\n");
-    }
-
-    for (auto& point : Notes[0]) {
-        printf(":() - 0\n");
-    }
-     for (auto& point : Notes[1]) {
-        printf(":() - 1\n");
-    }
-     for (auto& point : Notes[2]) {
-        printf(":() - 2\n");
-    }
 
     // Points
     if constexpr (pointmode == PointsMode::InsertSingle) {
